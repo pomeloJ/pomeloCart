@@ -49,9 +49,9 @@ cart.total();
     "itemQuantity": 5,
     "shippingPrice": 60,
     "shippingData": {
-        'type':'delivery',
-        'name':'常溫宅配',
-        'price':60
+        "type":"delivery",
+        "name":"常溫宅配",
+        "price":60
     },
     "note": {
         "buyNote":"dont come"
