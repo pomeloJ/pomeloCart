@@ -3,9 +3,9 @@
   Author : pomeloJ
   description : just easy to use
 */
-const pomeloCart=function(importData,setting){
+class pomeloCart{
   //init
-  this.init = function(importData,setting){
+  constructor(importData,setting){
     this.autosave = true;
     
 
@@ -25,7 +25,7 @@ const pomeloCart=function(importData,setting){
     return true;
   }
   //Add Item
-  this.addItem = function(data,callback){
+  addItem = function(data,callback){
     /*
       id:(Required)
       price:(Required)
@@ -72,7 +72,7 @@ const pomeloCart=function(importData,setting){
       return this;
   }
   //Edit Item
-  this.editItem = function(data,callback){
+  editItem = function(data,callback){
     /*
       id:(Required)
       price:(Required)
@@ -109,7 +109,7 @@ const pomeloCart=function(importData,setting){
     return this;
   }
   //Delete Item
-  this.delItem = function(data,callback){
+  delItem = function(data,callback){
     let pd = this.parseInput(data);
 
     //check if data is exist with ID
@@ -125,14 +125,14 @@ const pomeloCart=function(importData,setting){
     return this;
   }
   //List items with array
-  this.list = function(){
+  list = function(){
 
     return this.idArr;
   }
   //List items detail with array (DEV later)
-  this.listDeatil = function(){}
+  listDeatil = function(){}
   //empty Cart
-  this.empty = function(callback){
+  empty = function(callback){
     this.idArr=[];//Master ID array
     this.uidArr=[];//unit ID array
     this.noteData = '';//note
@@ -145,7 +145,7 @@ const pomeloCart=function(importData,setting){
     return this;
   }
   //get total summary
-  this.total = function(){
+  total = function(){
     //Calculation price for items
     let itemPrice=0;
     let itemQuantity=0;
@@ -172,7 +172,7 @@ const pomeloCart=function(importData,setting){
     return pd;
   }
   //note
-  this.setNote = function(data){
+  setNote = function (data, callback){
     /*
       no limit, just fill it
     */
@@ -180,10 +180,12 @@ const pomeloCart=function(importData,setting){
 
     this.saveData();
 
+    if (typeof (callback) == 'function') callback();
+
     return this;
   }
   //shipping data
-  this.setShipping = function(input,data){
+  setShipping = function(input,data,callback){
     /*
       type:(Required)
       name:(Required)
@@ -205,10 +207,12 @@ const pomeloCart=function(importData,setting){
 
     this.saveData();
 
+    if (typeof (callback) == 'function') callback();
+
     return this;
   }
   //export data
-  this.export = function(){
+  export = function(){
     let preString={
       'idArr':this.idArr,
       'shippingData':this.shippingData,
@@ -220,7 +224,7 @@ const pomeloCart=function(importData,setting){
     return exportString;
   }
   //import data
-  this.import = function(importData){
+  import = function(importData){
      let result = JSON.parse(importData);
 
      this.idArr = result['idArr'];
@@ -234,11 +238,11 @@ const pomeloCart=function(importData,setting){
   internal
 */
   //make uid
-  this.makeUid = function(){
+  makeUid = function(){
      return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }
   //check data and processing
-  this.parseInput = function(data){
+  parseInput = function(data){
     let id = data['id'] || false;
     let price = data['price'] || false;
     let quantity = (typeof(data['quantity'])=='number'?data['quantity']:1);
@@ -256,7 +260,7 @@ const pomeloCart=function(importData,setting){
     return finalData;
   }
   //check if data exist with ID
-  this.chkItem = function(data){
+  chkItem = function(data){
     let id = data['id'] || false;
     let result = this.idArr.find((d)=>{ return d['id'] == id});
 
@@ -264,7 +268,7 @@ const pomeloCart=function(importData,setting){
     return true;
   }
   //find index where in array
-  this.findIdIndex = function(data){
+  findIdIndex = function(data){
     /*
       id:
     */
@@ -277,7 +281,7 @@ const pomeloCart=function(importData,setting){
     return arrInx;
   }
   //get item data with ID
-  this.getItem = function(data){
+  getItem = function(data){
     /*
       id
     */
@@ -293,21 +297,18 @@ const pomeloCart=function(importData,setting){
     return gd;
   }
   //autosave
-  this.saveData = function(){
+  saveData = function(){
     let exportingString = this.export();
-    console.log(exportingString);
 
     localStorage.setItem('pomeloCartData',exportingString);
 
     return true;
   }
   //calData
-  this.calData=function(){
+  calData=function(){
      this.idArr.forEach((element, i, ori) => {
        //cal subtotal
       element.subtotal = (element.quantity * element.price);
     });
   }
-
-  this.init(importData,setting);//init first
 }
