@@ -88,7 +88,8 @@ cart.empty();
 ```
 
 ## Import/Export
-**pomeloCart** save data to localStorage **by default**,so you don't need handle about where to store
+**by default** *pomeloCart* save cart data in localStorage , so you don't need to think about how to store
+
 **BUT** if you want to export/import data , you can do........
 ### Export
 ```javascript
