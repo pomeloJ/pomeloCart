@@ -13,13 +13,13 @@ very simple cart data processing for Javascript(ES6)
 //init
 let cart = new pomeloCart;
 
-//add a cart item about id with **a1** , price is 123 and quantity is 2
+//add a cart item about id with 'a1' , price is 123 and quantity is 2
 cart.addItem({'id':'a1','price':123,'quantity':2});
 
-//add same item id(**a1**), now price is updated to 456 , quantity is updated to 2+3 = 5
+//add same item id [ 'a1' ], now price is updated to 456 , quantity is updated to 2+3 = 5
 cart.addItem({'id':'a1','price':456,'quantity':3});
 
-//reduce a item quantity, make a negative number
+//reduce a item quantity, fill a negative number
 cart.addItem({'id':'a2','quantity':-1});
 
 //edit a item data
