@@ -13,7 +13,7 @@ for easy just copy and coding
 
 we don't say anymore
 ```javascript
-<script src="https://cdn.ank.uno/github/pomeloJ/pomeloCart/cart.js"></script>
+<script src="https://cdn.ank.uno/github/pomeloJ/pomeloCart/pcart.js"></script>
 ```
 ## Basic sample[items]
 ```javascript
