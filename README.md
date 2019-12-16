@@ -8,6 +8,13 @@ very simple cart data processing for Javascript(ES6)
 *for dont't want to think too much*
 
 *for any simple reason*
+## CDN JS
+for easy just copy and coding
+
+we don't say anymore
+```javascript
+<script src="https://cdn.ank.uno/github/pomeloJ/pomeloCart/cart.js"></script>
+```
 ## Basic sample[items]
 ```javascript
 //init
