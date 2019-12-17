@@ -1,5 +1,5 @@
 # pomeloCart
-very simple cart data processing for Javascript(ES6)
+ It's really simple for cart about data processing [Javascript(ES6)]
 
 *for demo cart quickly*
 
@@ -9,7 +9,7 @@ very simple cart data processing for Javascript(ES6)
 
 *for any simple reason*
 ## CDN JS
-for easy just copy and coding
+for simplicity,just copy and coding
 
 we don't say anymore
 ```javascript
