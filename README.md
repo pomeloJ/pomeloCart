@@ -133,6 +133,25 @@ cart.addItem({'id':'a1','price':123,'quantity':2,
 ```
 data column **no limit** any type,just fill it
 
+## Coupon
+Add discount rules with custom conditions.
+```javascript
+cart.addCoupon({
+    tag: 'promo',
+    itemTag: 'myTag',
+    minPrice: 100,
+    discountType: 'percent',
+    discountValue: 0.1
+});
+//list coupons
+cart.couponList();
+//remove one
+cart.delCoupon({id: 'someId'});
+//clear all
+cart.clearCoupons();
+```
+`total()` subtracts discounts and returns the amount as `couponDiscount`.
+
 # Future
 * we don't know,maybe discount function or making items more detail.
 

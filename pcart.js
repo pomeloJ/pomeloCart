@@ -142,6 +142,7 @@ class pomeloCart{
     this.uidArr=[];//unit ID array
     this.noteData = {};//note
     this.shippingData = {}//shipping data
+    this.couponArr = [];//coupon data
 
     this.saveData();
 
@@ -162,8 +163,8 @@ class pomeloCart{
 
     let shippingPrice=(typeof(this.shippingData['price'])!='number'?0:this.shippingData['price']);//shipping
     let noteData=this.noteData;//note data
-
-    let allPrice = parseInt(shippingPrice) + parseInt(itemPrice);//all price
+    let discountPrice = this.couponDiscount();
+    let allPrice = parseInt(shippingPrice) + parseInt(itemPrice) - discountPrice;//all price
 
     let pd={
       'allPrice':allPrice,//all price
@@ -171,7 +172,8 @@ class pomeloCart{
       'itemQuantity':itemQuantity,//items quantity
       'shippingPrice':shippingPrice,//shipping fee
       'shippingData':this.shippingData,//all shipping data
-      'note':noteData//note data
+      'note':noteData,//note data
+      'couponDiscount':discountPrice
     }
 
     return pd;
@@ -216,12 +218,87 @@ class pomeloCart{
 
     return this;
   }
+
+  //coupon functions
+  addCoupon = function(data, callback){
+    let coupon = {
+      'id': this.makeUid(),
+      'tag': data['tag'] || false,
+      'itemTag': data['itemTag'] || false,
+      'minPrice': typeof(data['minPrice']) === 'number' ? data['minPrice'] : 0,
+      'discountType': data['discountType'] || 'amount',
+      'discountValue': typeof(data['discountValue']) === 'number' ? data['discountValue'] : 0
+    };
+
+    if(coupon.tag !== false){
+      this.couponArr = this.couponArr.filter(c => c.tag !== coupon.tag);
+    }
+
+    this.couponArr.push(coupon);
+
+    this.saveData();
+
+    if(typeof(callback) == 'function') callback();
+
+    return this;
+  }
+
+  couponList = function(){
+    return this.couponArr;
+  }
+
+  delCoupon = function(data, callback){
+    let id = data['id'] || false;
+    if(id === false) return false;
+
+    this.couponArr = this.couponArr.filter(c => c.id !== id);
+
+    this.saveData();
+
+    if(typeof(callback) == 'function') callback();
+
+    return this;
+  }
+
+  clearCoupons = function(callback){
+    this.couponArr = [];
+
+    this.saveData();
+
+    if(typeof(callback) == 'function') callback();
+
+    return this;
+  }
+
+  couponDiscount = function(){
+    let discount = 0;
+    this.couponArr.forEach(coupon => {
+      let tagTotal = 0;
+      this.idArr.forEach(item => {
+        let t = item.data && item.data.tag ? item.data.tag : false;
+        if(coupon.itemTag === false || t === coupon.itemTag){
+          tagTotal += item.price * item.quantity;
+        }
+      });
+
+      if(tagTotal >= coupon.minPrice){
+        if(coupon.discountType === 'percent'){
+          discount += tagTotal * coupon.discountValue;
+        }else{
+          discount += coupon.discountValue;
+        }
+      }
+    });
+
+    return discount;
+  }
   //export data
   export = function(){
     let preString={
       'idArr':this.idArr,
       'shippingData':this.shippingData,
-      'noteData':this.noteData
+      'noteData':this.noteData,
+      'couponArr':this.couponArr
     }
 
     let exportString = JSON.stringify(preString);
@@ -237,9 +314,10 @@ class pomeloCart{
        return false;
      }
 
-     this.idArr = result['idArr'] || [];
-     this.shippingData = result['shippingData'] || {};
-     this.noteData = result['noteData'] || {};
+    this.idArr = result['idArr'] || [];
+    this.shippingData = result['shippingData'] || {};
+    this.noteData = result['noteData'] || {};
+    this.couponArr = result['couponArr'] || [];
 
      this.calData();
      this.saveData();
