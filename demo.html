@@ -13,13 +13,35 @@
   <h1>pomeloCart Demo</h1>
   <div>
     <button onclick="addItemA()">Add Item A</button>
+    <button onclick="removeItemA()">Remove Item A</button>
     <button onclick="addItemB()">Add Item B</button>
+    <button onclick="removeItemB()">Remove Item B</button>
     <button onclick="clearCart()">Clear Cart</button>
+  </div>
+  <div style="margin-top:10px;">
+    <button onclick="addDemoCoupon()">Add 10% Coupon</button>
+    <button onclick="clearCoupons()">Clear Coupons</button>
+  </div>
+  <div style="margin-top:10px;">
+    <button onclick="setShipping()">Set Shipping $60</button>
+    <input id="noteInput" placeholder="Enter note" />
+    <button onclick="setNote()">Set Note</button>
+  </div>
+  <div style="margin-top:10px;">
+    <button onclick="exportData()">Export Data</button>
+    <button onclick="importData()">Import Data</button>
+    <textarea id="dataBox" rows="3" cols="50" placeholder="export/import data"></textarea>
   </div>
   <h2>Cart Items</h2>
   <pre id="items"></pre>
   <h2>Summary</h2>
   <pre id="summary"></pre>
+  <h2>Shipping</h2>
+  <pre id="shipping"></pre>
+  <h2>Note</h2>
+  <pre id="note"></pre>
+  <h2>Coupons</h2>
+  <pre id="coupons"></pre>
 
   <script src="pcart.js"></script>
   <script>
@@ -30,8 +52,18 @@
       render();
     }
 
+    function removeItemA() {
+      cart.addItem({ id: 'a1', quantity: -1 });
+      render();
+    }
+
     function addItemB() {
       cart.addItem({ id: 'b1', price: 50, quantity: 1 });
+      render();
+    }
+
+    function removeItemB() {
+      cart.addItem({ id: 'b1', quantity: -1 });
       render();
     }
 
@@ -40,9 +72,49 @@
       render();
     }
 
+    function addDemoCoupon() {
+      cart.addCoupon({
+        tag: 'demo',
+        itemTag: false,
+        minPrice: 0,
+        discountType: 'percent',
+        discountValue: 0.1
+      });
+      render();
+    }
+
+    function clearCoupons() {
+      cart.clearCoupons();
+      render();
+    }
+
+    function setShipping() {
+      cart.setShipping({type: 'delivery', name: '常溫宅配', price: 60});
+      render();
+    }
+
+    function setNote() {
+      const txt = document.getElementById('noteInput').value;
+      cart.setNote({text: txt});
+      render();
+    }
+
+    function exportData() {
+      document.getElementById('dataBox').value = cart.export();
+    }
+
+    function importData() {
+      const data = document.getElementById('dataBox').value;
+      cart.import(data);
+      render();
+    }
+
     function render() {
       document.getElementById('items').textContent = JSON.stringify(cart.list(), null, 2);
       document.getElementById('summary').textContent = JSON.stringify(cart.total(), null, 2);
+      document.getElementById('shipping').textContent = JSON.stringify(cart.shippingData, null, 2);
+      document.getElementById('note').textContent = JSON.stringify(cart.noteData, null, 2);
+      document.getElementById('coupons').textContent = JSON.stringify(cart.couponList(), null, 2);
     }
 
     render();
