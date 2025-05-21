@@ -34,6 +34,9 @@ class pomeloCart{
     */
     let pd = this.parseInput(data);
 
+    // default quantity when not provided
+    if(pd['quantity'] === false) pd['quantity'] = 1;
+
     let uid = this.makeUid();//for now no use
 
     //check if data is exist with ID
@@ -85,8 +88,8 @@ class pomeloCart{
     let chkResult = this.chkItem({'id':pd['id']});
     if(chkResult===false)return false;
 
-    //if quantity is less than 0 , make it to 0
-    if(pd['quantity']<0)pd['quantity']=0;
+    //if quantity is provided and less than 0 , make it to 0
+    if(pd['quantity'] !== false && pd['quantity'] < 0) pd['quantity'] = 0;
 
     //get data quantity for now
     let gData=this.getItem({'id':pd['id']});
@@ -135,7 +138,7 @@ class pomeloCart{
   empty = function(callback){
     this.idArr=[];//Master ID array
     this.uidArr=[];//unit ID array
-    this.noteData = '';//note
+    this.noteData = {};//note
     this.shippingData = {}//shipping data
 
     this.saveData();
@@ -225,11 +228,19 @@ class pomeloCart{
   }
   //import data
   import = function(importData){
-     let result = JSON.parse(importData);
+     let result;
+     try{
+       result = JSON.parse(importData);
+     }catch(err){
+       return false;
+     }
 
-     this.idArr = result['idArr'];
-     this.shippingData = result['shippingData'];
-     this.noteData = result['noteData'];
+     this.idArr = result['idArr'] || [];
+     this.shippingData = result['shippingData'] || {};
+     this.noteData = result['noteData'] || {};
+
+     this.calData();
+     this.saveData();
 
     return this;
   }
@@ -243,10 +254,13 @@ class pomeloCart{
   }
   //check data and processing
   parseInput = function(data){
-    let id = data['id'] || false;
-    let price = data['price'] || false;
-    let quantity = (typeof(data['quantity'])=='number'?data['quantity']:1);
-    let d = data['data'] || false;
+    // handle cases where argument is missing or not an object
+    data = (typeof data === 'object' && data !== null) ? data : {};
+
+    let id = (data.hasOwnProperty('id') ? data['id'] : false);
+    let price = (data.hasOwnProperty('price') ? data['price'] : false);
+    let quantity = (data.hasOwnProperty('quantity') ? data['quantity'] : false);
+    let d = (data.hasOwnProperty('data') ? data['data'] : false);
 
     let finalData={
       'id':id,
