@@ -5,7 +5,7 @@
 
 *for simple demand*
 
-*for dont't want to think too much*
+*for don't want to think too much*
 
 *for any simple reason*
 ## CDN JS
@@ -88,9 +88,15 @@ cart.list();
     }
 ]
 ```
+
+### Get cart detail list
+```javascript
+cart.listDetail();
+//return detailed item data
+```
 ## Empty cart
 ```javascript
-//it will clean items,but keep shipping and note
+//it will clean items, shipping data and note
 cart.empty();
 ```
 
@@ -108,9 +114,9 @@ it will give String
 ```
 
 ### Import
-```javscript
+```javascript
 cart.import(string);
-//or you cound init with import string
+//or you could init with import string
 let cart = new pomeloCart(string);
 ```
 

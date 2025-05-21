@@ -1,0 +1,12 @@
+{
+  "name": "pomeloCart",
+  "version": "1.0.0",
+  "description": "Simple cart library",
+  "main": "pcart.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}

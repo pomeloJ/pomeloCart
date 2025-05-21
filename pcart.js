@@ -132,8 +132,10 @@ class pomeloCart{
 
     return this.idArr;
   }
-  //List items detail with array (DEV later)
-  listDeatil = function(){}
+  //List items detail with array
+  listDetail = function(){
+    return this.idArr;
+  }
   //empty Cart
   empty = function(callback){
     this.idArr=[];//Master ID array
@@ -326,3 +328,5 @@ class pomeloCart{
     });
   }
 }
+
+module.exports = pomeloCart;
